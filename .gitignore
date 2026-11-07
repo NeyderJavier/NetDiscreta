@@ -1,0 +1,14 @@
+# Compilados y empaquetados
+target/
+build/
+dist/
+*.class
+*.jar
+
+# NetBeans (configuración local)
+nbproject/private/
+nb-configuration.xml
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
