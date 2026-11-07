@@ -27,8 +27,8 @@ public class VentanaPrincipal extends JFrame {
         pestanas.addTab("2. Grupos", new PanelGrupos(estado));
         pestanas.addTab("3. Conexiones", new PanelConexiones(estado));
         pestanas.addTab("4. Mensajes", new PanelMensajes(estado));
-        pestanas.addTab("5. Canal", new PanelPendiente("Canal", "Espacio muestral, eventos, variable aleatoria y binomial", "Fase 3"));
-        pestanas.addTab("6. Verificador", new PanelPendiente("Verificador", "Álgebra booleana", "Fase 3"));
+        pestanas.addTab("5. Canal", new PanelCanal(estado));
+        pestanas.addTab("6. Verificador", new PanelVerificador(estado));
 
         // Al cambiar de pestaña, el módulo se actualiza con los cambios hechos en los otros
         pestanas.addChangeListener(e -> {

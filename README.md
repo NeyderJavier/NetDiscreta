@@ -14,8 +14,8 @@ El usuario construye una red, la organiza en grupos, escribe un mensaje binario,
 | 2 | Grupos | Conjuntos: unión, intersección, diferencias, complemento, subconjuntos, diagrama de Venn | ✅ Listo |
 | 3 | Conexiones | Producto cartesiano A × B en el plano y relación R ⊆ A × B | ✅ Listo |
 | 4 | Mensajes | Alfabetos, cadenas (longitud, inversa, concatenación, potencia, prefijos, sufijos), Σⁿ y lenguajes | ✅ Listo |
-| 5 | Canal | Espacio muestral, eventos, variable aleatoria, distribución binomial | ⏳ Fase 3 |
-| 6 | Verificador | Álgebra booleana: bit de paridad (XOR), tablas de verdad | ⏳ Fase 3 |
+| 5 | Canal | Espacio muestral Ω = {C, E}ⁿ, eventos, variable aleatoria X ~ B(n, p), media, varianza y simulación | ✅ Listo |
+| 6 | Verificador | Álgebra booleana: bit de paridad con XOR, circuito de compuertas, tablas de verdad, minitérminos y equivalencias | ✅ Listo |
 
 ## Capturas
 
@@ -23,11 +23,22 @@ El usuario construye una red, la organiza en grupos, escribe un mensaje binario,
 |---|---|
 | ![Grupos](docs/img/modulo-grupos.png) | ![Conexiones](docs/img/modulo-conexiones.png) |
 
-| Mensajes (cadenas y lenguajes) |
-|---|
-| ![Mensajes](docs/img/modulo-mensajes.png) |
+| Mensajes (cadenas y lenguajes) | Canal (binomial) |
+|---|---|
+| ![Mensajes](docs/img/modulo-mensajes.png) | ![Canal](docs/img/modulo-canal.png) |
 
-**Demo rápida:** en *Red* pulsa *Red de ejemplo*; en *Grupos* pulsa *Grupos de ejemplo*; en *Conexiones* pulsa *Generar A × B*; en *Mensajes* valida `1011001` contra el lenguaje *Paridad par*.
+| Verificador (álgebra booleana) |
+|---|
+| ![Verificador](docs/img/modulo-verificador.png) |
+
+## Demostración completa
+
+1. **Red:** *Red de ejemplo* → *Calcular ruta* de PC1 a SRV (13 ms).
+2. **Grupos:** *Grupos de ejemplo* → prueba unión e intersección de Norte y Sur.
+3. **Conexiones:** *Generar A × B* → 12 pares, 4 de ellos con enlace directo.
+4. **Mensajes:** valida `1011001` contra *Paridad par* → *Usar como mensaje*.
+5. **Canal:** sube p a 0.25 → *Simular N envíos* y compara la teoría con la simulación → *Enviar trama una vez*.
+6. **Verificador:** *Traer del Canal* → el receptor calcula S y dice si detectó el error (y si de verdad lo hubo).
 
 ## Cómo ejecutarlo
 
@@ -47,9 +58,11 @@ java -jar target/NetDiscreta-1.0.jar
 src/main/java/
 ├── main/            → NetDiscreta (punto de entrada)
 ├── modelo/          → Nodo, Arista, Grafo, Conjunto, Estado
-├── logica/          → Dijkstra, OperacionesConjuntos, ProductoCartesiano, Cadenas, Lenguaje
-└── vista/           → VentanaPrincipal, PanelRed, PanelGrupos, PanelConexiones, PanelMensajes
-    └── graficos/    → LienzoGrafo, LienzoVenn, LienzoPlano (dibujo con Graphics2D)
+├── logica/          → Dijkstra, OperacionesConjuntos, ProductoCartesiano, Cadenas, Lenguaje,
+│                      Binomial, Evento, EspacioMuestral, SimuladorCanal, Paridad, ExpresionBooleana
+└── vista/           → VentanaPrincipal, PanelRed, PanelGrupos, PanelConexiones, PanelMensajes,
+    │                  PanelCanal, PanelVerificador
+    └── graficos/    → LienzoGrafo, LienzoVenn, LienzoPlano, LienzoBarras, LienzoCircuito
 docs/                → Propuesta del proyecto e imágenes
 ```
 
