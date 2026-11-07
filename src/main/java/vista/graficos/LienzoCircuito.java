@@ -84,7 +84,8 @@ public class LienzoCircuito extends JPanel {
         for (int i = 0; i < n; i++) {
             int b = Paridad.bit(bits.charAt(i));
             g.setColor(Color.DARK_GRAY);
-            String et = "b" + (i + 1) + " = " + b;
+            String prefijo = "S".equals(salida) ? "r" : "b";   // bits recibidos (r) o enviados (b)
+            String et = prefijo + (i + 1) + " = " + b;
             g.drawString(et, 8, (int) y[i] + 4);
         }
 
