@@ -121,6 +121,24 @@ public class Grafo {
         return s;
     }
 
+    /** Carga una red de 6 equipos para pruebas y demostraciones. */
+    public void cargarEjemplo() {
+        limpiar();
+        Nodo pc1 = agregarNodo("PC1", 90, 120);
+        Nodo pc2 = agregarNodo("PC2", 90, 330);
+        Nodo r1 = agregarNodo("R1", 250, 220);
+        Nodo r2 = agregarNodo("R2", 400, 110);
+        Nodo r3 = agregarNodo("R3", 400, 340);
+        Nodo srv = agregarNodo("SRV", 540, 220);
+        agregarArista(pc1, r1, 4);
+        agregarArista(pc2, r1, 3);
+        agregarArista(r1, r2, 7);
+        agregarArista(r1, r3, 2);
+        agregarArista(r3, r2, 3);
+        agregarArista(r2, srv, 4);
+        agregarArista(r3, srv, 9);
+    }
+
     public void limpiar() {
         aristas.clear();
         nodos.clear();

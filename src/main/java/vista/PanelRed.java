@@ -29,7 +29,7 @@ import vista.graficos.LienzoGrafo;
  * Módulo 1 — Red (Grafos).
  * Crear equipos y conexiones, ver propiedades del grafo y la ruta más corta.
  */
-public class PanelRed extends JPanel {
+public class PanelRed extends JPanel implements Refrescable {
 
     private final Grafo grafo;
     private final LienzoGrafo lienzo;
@@ -215,20 +215,7 @@ public class PanelRed extends JPanel {
     }
 
     private void cargarEjemplo() {
-        grafo.limpiar();
-        Nodo pc1 = grafo.agregarNodo("PC1", 90, 120);
-        Nodo pc2 = grafo.agregarNodo("PC2", 90, 330);
-        Nodo r1 = grafo.agregarNodo("R1", 250, 220);
-        Nodo r2 = grafo.agregarNodo("R2", 400, 110);
-        Nodo r3 = grafo.agregarNodo("R3", 400, 340);
-        Nodo srv = grafo.agregarNodo("SRV", 540, 220);
-        grafo.agregarArista(pc1, r1, 4);
-        grafo.agregarArista(pc2, r1, 3);
-        grafo.agregarArista(r1, r2, 7);
-        grafo.agregarArista(r1, r3, 2);
-        grafo.agregarArista(r3, r2, 3);
-        grafo.agregarArista(r2, srv, 4);
-        grafo.agregarArista(r3, srv, 9);
+        grafo.cargarEjemplo();
         refrescar();
         salida.setText("Red de ejemplo cargada.\nPrueba la ruta PC1 → SRV.");
     }
@@ -236,6 +223,7 @@ public class PanelRed extends JPanel {
     // ---------------- Utilidades ----------------
 
     /** Actualiza listas desplegables y dibujo. Lo pueden llamar otros módulos. */
+    @Override
     public final void refrescar() {
         for (JComboBox<Nodo> cb : List.of(cbA, cbB, cbOrigen, cbDestino)) {
             Object sel = cb.getSelectedItem();
