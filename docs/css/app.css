@@ -1,0 +1,97 @@
+:root {
+  --navy: #14213D;
+  --azul: #1F3A5F;
+  --paper: #F7F6F1;
+  --paper-2: #ECEFF3;
+  --naranja: #E67E22;
+  --naranja-texto: #A8490C;
+  --texto: #3D4A5C;
+  --suave: #6B7686;
+  --borde: #D6DCE5;
+  --verde: #278C50;
+  --rojo: #C0392B;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', Arial, sans-serif; color: var(--texto); background: var(--paper); font-size: 15px; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
+h3 { font-family: 'Space Grotesk', Arial, sans-serif; color: var(--navy); font-size: 15px; margin: 14px 0 6px; }
+h3:first-child { margin-top: 0; }
+
+/* ---------- Barra superior ---------- */
+.barra { background: var(--navy); display: flex; align-items: center; gap: 24px; padding: 0 20px; min-height: 56px; flex-wrap: wrap; position: sticky; top: 0; z-index: 5; }
+.logo { font-family: 'Space Grotesk', Arial, sans-serif; font-weight: 700; font-size: 20px; color: var(--paper); text-decoration: none; }
+.logo span { color: var(--naranja); }
+.pestanas { display: flex; gap: 2px; flex-wrap: wrap; flex: 1; }
+.pestanas button { width: auto; margin: 0; border-radius: 0; background: none; border: none; color: #C9D3E3; font: inherit; font-size: 14px; padding: 17px 14px 15px; cursor: pointer; border-bottom: 3px solid transparent; }
+.pestanas button:hover { color: #FFFFFF; background: none; }
+.pestanas button[aria-selected="true"] { color: #FFFFFF; border-bottom-color: var(--naranja); font-weight: 600; }
+.enlaces { display: flex; gap: 18px; }
+.enlaces a { color: #C9D3E3; font-size: 13px; text-decoration: none; }
+.enlaces a:hover { color: #FFFFFF; }
+
+/* ---------- Panel de cada módulo ---------- */
+main { flex: 1; padding: 20px; max-width: 1400px; width: 100%; margin: 0 auto; }
+.panel { display: grid; grid-template-columns: minmax(0, 1fr) 330px; grid-template-areas: "lienzo controles" "salida controles"; gap: 16px; align-items: start; }
+.panel[hidden] { display: none; }
+.panel.sin-lienzo { grid-template-columns: 360px minmax(0, 1fr); grid-template-areas: "controles salida"; }
+.lienzo { grid-area: lienzo; background: #FFFFFF; border: 1px solid var(--borde); border-radius: 10px; padding: 8px; }
+.lienzo svg { width: 100%; height: auto; display: block; touch-action: none; user-select: none; }
+.ayuda-lienzo { font-size: 12px; color: var(--suave); padding: 0 6px 2px; }
+.controles { grid-area: controles; background: #FFFFFF; border: 1px solid var(--borde); border-radius: 10px; padding: 16px; }
+.salida { grid-area: salida; background: #FFFFFF; border: 1px solid var(--borde); border-radius: 10px; padding: 14px 16px; min-height: 120px; overflow-x: auto; }
+.salida:empty::before { content: "Los resultados aparecen aquí."; color: var(--suave); font-size: 14px; }
+.salida pre { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 13px; line-height: 1.55; white-space: pre-wrap; color: var(--navy); }
+.salida.grande { min-height: 520px; }
+.salida table { border-collapse: collapse; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 13px; margin-top: 8px; }
+.salida th, .salida td { border: 1px solid var(--borde); padding: 4px 10px; text-align: center; }
+.salida th { background: var(--paper-2); color: var(--navy); }
+.salida td.marcado { background: #FCEBDD; font-weight: 600; }
+
+/* ---------- Controles ---------- */
+label { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 6px; color: var(--texto); }
+label > input, label > select { flex: 1; min-width: 0; }
+input, select { font: inherit; font-size: 14px; padding: 6px 8px; border: 1px solid var(--borde); border-radius: 6px; background: #FFFFFF; color: var(--navy); }
+input:focus, select:focus, button:focus-visible { outline: 2px solid var(--naranja); outline-offset: 1px; }
+button { font: inherit; font-size: 13px; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--borde); background: var(--paper-2); color: var(--navy); cursor: pointer; width: 100%; margin-bottom: 6px; }
+button:hover { background: #DFE4EC; }
+button.principal { background: var(--navy); color: #FFFFFF; border-color: var(--navy); font-weight: 600; }
+button.principal:hover { background: var(--azul); }
+.fila2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.fila2 label { flex-direction: column; align-items: stretch; gap: 2px; }
+.mini { font-size: 12px; color: var(--suave); margin: 6px 0 4px; }
+.check { gap: 6px; cursor: pointer; }
+.check input { flex: none; }
+.radios { font-size: 13px; margin: 6px 0; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; }
+.radios .check { margin: 0; }
+.checks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px 8px; max-height: 110px; overflow-y: auto; border: 1px solid var(--borde); border-radius: 6px; padding: 6px 8px; margin-bottom: 8px; }
+.checks:empty::before { content: "No hay equipos: créalos en el módulo Red."; font-size: 12px; color: var(--suave); grid-column: 1 / -1; }
+.checks .check { margin: 0; font-size: 13px; }
+.lista-grupos { list-style: none; border: 1px solid var(--borde); border-radius: 6px; max-height: 96px; overflow-y: auto; margin-bottom: 6px; }
+.lista-grupos:empty::before { content: "Aún no hay grupos."; display: block; padding: 6px 8px; font-size: 12px; color: var(--suave); }
+.lista-grupos li { padding: 4px 8px; font-size: 13px; cursor: pointer; border-bottom: 1px solid var(--paper-2); }
+.lista-grupos li:hover { background: var(--paper-2); }
+.lista-grupos li.sel { background: #FCEBDD; }
+.tabla-pares { max-height: 220px; overflow-y: auto; border: 1px solid var(--borde); border-radius: 6px; }
+.tabla-pares table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tabla-pares th { position: sticky; top: 0; background: var(--paper-2); color: var(--navy); text-align: left; padding: 4px 8px; }
+.tabla-pares td { padding: 3px 8px; border-top: 1px solid var(--paper-2); }
+.tabla-pares tr.rel td { color: var(--naranja-texto); font-weight: 600; }
+.tabla-pares:empty::before { content: "Genera A × B para ver los pares."; display: block; padding: 6px 8px; font-size: 12px; color: var(--suave); }
+.veredicto { margin: 6px 0; padding: 8px 10px; border-radius: 6px; font-weight: 600; text-align: center; font-size: 14px; }
+.veredicto.ok { background: #E5F4E4; color: var(--verde); }
+.veredicto.mal { background: #FBEBEB; color: var(--rojo); }
+.veredicto.info { background: #E7F1FB; color: var(--azul); }
+
+/* ---------- Aviso ---------- */
+.aviso { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); background: var(--navy); color: #FFFFFF; padding: 12px 20px; border-radius: 8px; box-shadow: 0 8px 28px rgba(0,0,0,0.25); font-size: 14px; max-width: 90vw; z-index: 30; border-left: 5px solid var(--naranja); }
+
+.pie { text-align: center; font-size: 12px; color: var(--suave); padding: 16px; }
+
+/* ---------- Pantallas pequeñas ---------- */
+@media (max-width: 900px) {
+  .panel, .panel.sin-lienzo { grid-template-columns: 1fr; grid-template-areas: "lienzo" "controles" "salida"; }
+  .panel.sin-lienzo { grid-template-areas: "controles" "salida"; }
+  .enlaces { display: none; }
+  .pestanas button { padding: 10px 8px; font-size: 13px; }
+  main { padding: 12px; }
+  .salida.grande { min-height: 200px; }
+}

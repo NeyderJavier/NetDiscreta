@@ -42,7 +42,11 @@ El usuario construye una red, la organiza en grupos, escribe un mensaje binario,
 
 ## Sitio web
 
-Página del proyecto (GitHub Pages): https://neyderjavier.github.io/NetDiscreta/
+**Simulador en el navegador (GitHub Pages):** https://neyderjavier.github.io/NetDiscreta/ — los mismos 6 módulos del programa en Java, sin instalar nada.
+
+Página informativa del proyecto: https://neyderjavier.github.io/NetDiscreta/proyecto.html
+
+La versión web está en `docs/` (HTML, CSS y JavaScript sin librerías): `docs/js/logica.js` replica los paquetes `modelo` y `logica`, `docs/js/graficos.js` los lienzos y `docs/js/app.js` los paneles.
 
 ## Documentación
 
