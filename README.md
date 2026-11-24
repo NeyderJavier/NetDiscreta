@@ -40,12 +40,17 @@ El usuario construye una red, la organiza en grupos, escribe un mensaje binario,
 5. **Canal:** sube p a 0.25 → *Simular N envíos* y compara la teoría con la simulación → *Enviar trama una vez*.
 6. **Verificador:** *Traer del Canal* → el receptor calcula S y dice si detectó el error (y si de verdad lo hubo).
 
+## Sitio web
+
+Página del proyecto (GitHub Pages): https://neyderjavier.github.io/NetDiscreta/
+
 ## Documentación
 
 | Documento | Contenido |
 |---|---|
 | [Manual de usuario](docs/Manual_de_Usuario_NetDiscreta.pdf) | Instalación, uso de cada módulo, recorrido de demostración y solución de problemas |
 | [Informe final](docs/Informe_Final_NetDiscreta.pdf) | Marco teórico, diseño, implementación, 18 casos de prueba, resultados y conclusiones |
+| [Cómo funciona](docs/NetDiscreta_Explicacion.pdf) | Arquitectura, librerías, algoritmos clave y preguntas de sustentación |
 | [Propuesta](docs/Propuesta_NetDiscreta.pdf) | Propuesta inicial del proyecto |
 
 ## Cómo ejecutarlo

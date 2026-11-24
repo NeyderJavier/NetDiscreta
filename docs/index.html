@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NetDiscreta · Simulador de envío de mensajes en una red</title>
+<meta name="description" content="NetDiscreta: simulador en Java que sigue un mensaje por una red y aplica un tema de Matemáticas Discretas en cada etapa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&display=swap">
+<style>
+  :root {
+    --navy: #14213D;
+    --navy-2: #1F3A5F;
+    --paper: #F7F6F1;
+    --paper-2: #ECEFF3;
+    --naranja: #E67E22;
+    --naranja-texto: #A8490C;
+    --texto: #3D4A5C;
+    --suave: #6B7686;
+    --borde: #D6DCE5;
+    --ancho: 1120px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', Arial, sans-serif; color: var(--texto); background: var(--paper); line-height: 1.6; font-size: 17px; }
+  h1, h2, h3 { font-family: 'Space Grotesk', Arial, sans-serif; color: var(--navy); line-height: 1.15; }
+  h2 { font-size: clamp(28px, 4vw, 42px); margin-bottom: 16px; }
+  h3 { font-size: 22px; margin-bottom: 8px; }
+  a { color: var(--naranja-texto); }
+  img { max-width: 100%; display: block; }
+  code { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 0.92em; background: var(--paper-2); padding: 2px 6px; border-radius: 4px; color: var(--navy); }
+  .contenedor { max-width: var(--ancho); margin: 0 auto; padding: 0 24px; }
+  section { padding: 88px 0; }
+  .eyebrow { font-size: 14px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--naranja-texto); margin-bottom: 12px; }
+  .intro { font-size: 19px; max-width: 760px; margin-bottom: 40px; }
+
+  /* ---- Navegación ---- */
+  nav { position: sticky; top: 0; z-index: 10; background: rgba(20, 33, 61, 0.96); backdrop-filter: blur(6px); }
+  nav .contenedor { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { font-family: 'Space Grotesk', Arial, sans-serif; font-weight: 700; font-size: 20px; color: var(--paper); text-decoration: none; }
+  .logo span { color: var(--naranja); }
+  nav ul { list-style: none; display: flex; gap: 28px; }
+  nav ul a { color: #C9D3E3; text-decoration: none; font-size: 15px; }
+  nav ul a:hover { color: #FFFFFF; }
+
+  /* ---- Portada ---- */
+  .hero { background: var(--navy); color: #C9D3E3; padding: 96px 0 104px; }
+  .hero h1 { color: var(--paper); font-size: clamp(48px, 8vw, 92px); margin-bottom: 20px; }
+  .hero .barra { width: 96px; height: 8px; background: var(--naranja); margin-bottom: 28px; }
+  .hero p.lema { font-size: clamp(19px, 2.4vw, 24px); max-width: 760px; color: #E3E8F0; margin-bottom: 36px; }
+  .botones { display: flex; flex-wrap: wrap; gap: 14px; }
+  .boton { display: inline-block; padding: 13px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 16px; }
+  .boton.principal { background: var(--naranja); color: var(--navy); }
+  .boton.principal:hover { background: #F0913A; }
+  .boton.secundario { border: 2px solid #4A5D80; color: var(--paper); }
+  .boton.secundario:hover { border-color: var(--paper); }
+  .hero .meta { margin-top: 48px; font-size: 15px; color: #9FB0C8; }
+
+  /* ---- Pregunta ---- */
+  .pregunta { font-family: 'Space Grotesk', Arial, sans-serif; font-size: clamp(26px, 3.6vw, 40px); color: var(--navy); line-height: 1.25; max-width: 900px; margin-bottom: 28px; font-weight: 700; }
+  .respuestas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .respuesta { background: #FFFFFF; border-radius: 12px; padding: 24px; border-top: 6px solid var(--navy); }
+  .respuesta.acento { border-top-color: var(--naranja); }
+  .respuesta b { color: var(--navy); }
+
+  /* ---- Recorrido ---- */
+  .fondo-alterno { background: var(--paper-2); }
+  .pasos { list-style: none; display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; counter-reset: paso; }
+  .pasos li { background: #FFFFFF; border-radius: 12px; padding: 20px 18px; border-top: 6px solid var(--navy); }
+  .pasos li:last-child { border-top-color: var(--naranja); }
+  .pasos .n { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 30px; font-weight: 700; color: var(--naranja-texto); line-height: 1; margin-bottom: 8px; }
+  .pasos h3 { font-size: 19px; margin-bottom: 4px; }
+  .pasos .tema { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+  .pasos .que { font-size: 14px; line-height: 1.45; }
+
+  /* ---- Módulos ---- */
+  .modulo { display: grid; grid-template-columns: 5fr 7fr; gap: 48px; align-items: center; padding: 48px 0; border-bottom: 1px solid var(--borde); }
+  .modulo:last-child { border-bottom: none; }
+  .modulo.invertido .modulo-texto { order: 2; }
+  .modulo .dato { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 52px; font-weight: 700; color: var(--navy); line-height: 1; margin: 12px 0 6px; }
+  .modulo .dato-label { font-weight: 600; color: var(--naranja-texto); margin-bottom: 16px; }
+  .modulo ul { padding-left: 20px; }
+  .modulo li { margin-bottom: 6px; }
+  .modulo .clases { font-size: 14px; color: var(--suave); margin-top: 14px; }
+  .formula { background: #FFFFFF; border-left: 5px solid var(--naranja); padding: 12px 16px; color: var(--navy); font-weight: 600; margin: 12px 0; }
+  .captura { border-radius: 12px; background: #FFFFFF; box-shadow: 0 10px 36px rgba(20, 33, 61, 0.14); cursor: zoom-in; }
+
+  /* ---- Hallazgo ---- */
+  .hallazgo { background: var(--naranja); color: var(--navy); }
+  .hallazgo .eyebrow { color: var(--navy); }
+  .hallazgo .grande { font-family: 'Space Grotesk', Arial, sans-serif; font-size: clamp(88px, 16vw, 180px); font-weight: 700; line-height: 1; }
+  .hallazgo p { font-size: 20px; max-width: 820px; margin-top: 16px; }
+
+  /* ---- Arquitectura ---- */
+  .modulo > *, .tec > *, .instalar > * { min-width: 0; }
+  .tabla-envoltura { overflow-x: auto; border-radius: 12px; }
+  .capas { display: flex; flex-direction: column; align-items: stretch; max-width: 900px; }
+  .capa { background: #FFFFFF; border: 2px solid var(--borde); border-radius: 12px; padding: 20px 24px; display: grid; grid-template-columns: 160px 1fr; gap: 20px; align-items: center; }
+  .capa h3 { margin: 0; }
+  .capa.modelo { background: #FCEBDD; border-color: var(--naranja); }
+  .flecha { color: var(--suave); font-size: 14px; padding: 8px 0 8px 184px; }
+
+  /* ---- Tecnologías ---- */
+  .tec { display: grid; grid-template-columns: 1fr 2fr; gap: 48px; align-items: start; }
+  .cifra { margin-bottom: 24px; }
+  .cifra .n { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 56px; font-weight: 700; color: var(--navy); line-height: 1; }
+  table { width: 100%; border-collapse: collapse; background: #FFFFFF; border-radius: 12px; overflow: hidden; font-size: 15px; }
+  th { background: var(--navy); color: var(--paper); text-align: left; padding: 12px 16px; font-weight: 600; }
+  td { padding: 12px 16px; border-top: 1px solid var(--paper-2); vertical-align: top; }
+  td:first-child { font-weight: 600; color: var(--navy); }
+
+  /* ---- Ejecutar ---- */
+  .instalar { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .tarjeta { background: #FFFFFF; border-radius: 12px; padding: 28px; }
+  .tarjeta ol { padding-left: 20px; }
+  .tarjeta li { margin-bottom: 8px; }
+  pre { background: var(--navy); color: #E3E8F0; padding: 18px 20px; border-radius: 8px; overflow-x: auto; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 14px; line-height: 1.6; margin-top: 12px; }
+
+  /* ---- Documentos ---- */
+  .docs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .doc { background: #FFFFFF; border-radius: 12px; padding: 24px; text-decoration: none; color: var(--texto); border: 2px solid transparent; transition: border-color 0.2s, transform 0.2s; display: flex; flex-direction: column; }
+  .doc:hover { border-color: var(--naranja); transform: translateY(-3px); }
+  .doc .tipo { font-size: 13px; font-weight: 600; color: var(--naranja-texto); letter-spacing: 1.5px; margin-bottom: 8px; }
+  .doc h3 { font-size: 19px; }
+  .doc p { font-size: 14px; flex: 1; }
+  .doc .descargar { margin-top: 14px; font-weight: 600; color: var(--navy); font-size: 14px; }
+
+  /* ---- Pie ---- */
+  footer { background: var(--navy); color: #9FB0C8; padding: 48px 0; font-size: 15px; }
+  footer .contenedor { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+  footer b { color: var(--paper); }
+  footer a { color: #E3E8F0; }
+
+  /* ---- Visor de imágenes ---- */
+  .visor { position: fixed; inset: 0; background: rgba(20, 33, 61, 0.92); display: none; align-items: center; justify-content: center; padding: 32px; z-index: 20; cursor: zoom-out; }
+  .visor.abierto { display: flex; }
+  .visor img { max-height: 90vh; border-radius: 10px; }
+
+  /* ---- Pantallas pequeñas ---- */
+  @media (max-width: 900px) {
+    nav ul { display: none; }
+    .respuestas, .instalar { grid-template-columns: 1fr; }
+    .pasos { grid-template-columns: repeat(2, 1fr); }
+    .modulo, .tec { grid-template-columns: 1fr; gap: 24px; }
+    .modulo.invertido .modulo-texto { order: 0; }
+    .docs { grid-template-columns: repeat(2, 1fr); }
+    .capa { grid-template-columns: 1fr; gap: 6px; }
+    .flecha { padding-left: 24px; }
+  }
+  @media (max-width: 520px) {
+    .docs, .pasos { grid-template-columns: 1fr; }
+    section { padding: 64px 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="contenedor">
+    <a class="logo" href="#inicio">Net<span>Discreta</span></a>
+    <ul>
+      <li><a href="#como-funciona">Cómo funciona</a></li>
+      <li><a href="#modulos">Módulos</a></li>
+      <li><a href="#arquitectura">Arquitectura</a></li>
+      <li><a href="#ejecutar">Ejecutar</a></li>
+      <li><a href="#documentos">Documentos</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="inicio">
+  <div class="contenedor">
+    <p class="eyebrow" style="color: var(--naranja);">Matemáticas Discretas · Proyecto final</p>
+    <h1>NetDiscreta</h1>
+    <div class="barra"></div>
+    <p class="lema">Un simulador en Java que sigue un mensaje binario por una red de computadores y aplica un tema de Matemáticas Discretas en cada etapa del viaje.</p>
+    <div class="botones">
+      <a class="boton principal" href="#modulos">Ver los módulos</a>
+      <a class="boton secundario" href="https://github.com/NeyderJavier/NetDiscreta">Código en GitHub</a>
+      <a class="boton secundario" href="Manual_de_Usuario_NetDiscreta.pdf">Manual de usuario</a>
+    </div>
+    <p class="meta">Neyder Javier Rojas Lasso · Ingeniería de Sistemas · Universidad Simón Bolívar · 2026</p>
+  </div>
+</header>
+
+<section id="pregunta">
+  <div class="contenedor">
+    <p class="eyebrow">La pregunta del proyecto</p>
+    <p class="pregunta">Si envío un mensaje por una red, ¿por dónde viaja, puede dañarse y cómo sé si llegó bien?</p>
+    <div class="respuestas">
+      <div class="respuesta"><b>Por dónde viaja.</b> La red es un grafo y la ruta más corta se calcula con Dijkstra.</div>
+      <div class="respuesta"><b>Si puede dañarse.</b> Los errores del canal siguen una distribución binomial.</div>
+      <div class="respuesta acento"><b>Si llegó bien.</b> Un bit de paridad calculado con álgebra booleana (XOR) detecta los errores.</div>
+    </div>
+  </div>
+</section>
+
+<section id="como-funciona" class="fondo-alterno">
+  <div class="contenedor">
+    <p class="eyebrow">Cómo funciona</p>
+    <h2>El recorrido de un mensaje, de la red al receptor</h2>
+    <p class="intro">El programa tiene seis pestañas. Todas comparten la misma red, los mismos grupos y el mismo mensaje, así que lo que se hace en una se ve en las demás.</p>
+    <ol class="pasos">
+      <li><p class="n">1</p><h3>Red</h3><p class="tema">Grafos</p><p class="que">Ruta PC1 → SRV de 13 ms</p></li>
+      <li><p class="n">2</p><h3>Grupos</h3><p class="tema">Conjuntos</p><p class="que">Norte ∩ Sur = {R3}</p></li>
+      <li><p class="n">3</p><h3>Conexiones</h3><p class="tema">Producto cartesiano</p><p class="que">12 pares, 4 con enlace directo</p></li>
+      <li><p class="n">4</p><h3>Mensajes</h3><p class="tema">Lenguajes</p><p class="que">w = 1011001 tiene paridad par</p></li>
+      <li><p class="n">5</p><h3>Canal</h3><p class="tema">Binomial</p><p class="que">Cada bit falla con probabilidad p</p></li>
+      <li><p class="n">6</p><h3>Verificador</h3><p class="tema">Álgebra booleana</p><p class="que">S = 0 acepta, S = 1 detecta</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="modulos">
+  <div class="contenedor">
+    <p class="eyebrow">Los seis módulos</p>
+    <h2>Cada tema del curso, funcionando</h2>
+    <p class="intro">Haz clic en una captura para verla en grande.</p>
+
+    <article class="modulo">
+      <div class="modulo-texto">
+        <p class="eyebrow">Módulo 1 · Grafos</p>
+        <h3>Red: la ruta más corta</h3>
+        <p class="dato">13 ms</p>
+        <p class="dato-label">PC1 → R1 → R3 → R2 → SRV</p>
+        <ul>
+          <li>Equipos como vértices y enlaces como aristas con latencia</li>
+          <li>Grados, matriz de adyacencia y conexidad (BFS)</li>
+          <li>Algoritmo de Dijkstra con la ruta resaltada</li>
+        </ul>
+        <p class="clases">Clases: Grafo, Nodo, Arista, Dijkstra, PanelRed, LienzoGrafo</p>
+      </div>
+      <img class="captura" src="img/modulo-red.png" alt="Módulo Red: grafo de seis equipos con la ruta de PC1 a SRV resaltada en naranja" loading="lazy">
+    </article>
+
+    <article class="modulo invertido">
+      <div class="modulo-texto">
+        <p class="eyebrow">Módulo 2 · Conjuntos</p>
+        <h3>Grupos: operaciones entre conjuntos</h3>
+        <p class="dato">{R3}</p>
+        <p class="dato-label">Norte ∩ Sur</p>
+        <ul>
+          <li>Unión, intersección, diferencias y complemento</li>
+          <li>Subconjuntos y conjuntos disjuntos</li>
+          <li>Diagrama de Venn con la región del resultado</li>
+        </ul>
+        <p class="formula">|A ∪ B| = |A| + |B| − |A ∩ B|</p>
+        <p class="clases">Clases: Conjunto, OperacionesConjuntos, PanelGrupos, LienzoVenn</p>
+      </div>
+      <img class="captura" src="img/modulo-grupos.png" alt="Módulo Grupos: diagrama de Venn de Norte y Sur con la intersección sombreada" loading="lazy">
+    </article>
+
+    <article class="modulo">
+      <div class="modulo-texto">
+        <p class="eyebrow">Módulo 3 · Producto cartesiano</p>
+        <h3>Conexiones: todos los pares entre dos grupos</h3>
+        <p class="dato">12 pares</p>
+        <p class="dato-label">|Norte × Sur| = 4 · 3</p>
+        <ul>
+          <li>Los pares con enlace directo forman la relación R ⊆ A × B</li>
+          <li>Cada par se ubica en el plano cartesiano</li>
+          <li>A × B ≠ B × A: el orden importa</li>
+        </ul>
+        <p class="clases">Clases: ProductoCartesiano, PanelConexiones, LienzoPlano</p>
+      </div>
+      <img class="captura" src="img/modulo-conexiones.png" alt="Módulo Conexiones: plano cartesiano de Norte por Sur con cuatro pares resaltados" loading="lazy">
+    </article>
+
+    <article class="modulo invertido">
+      <div class="modulo-texto">
+        <p class="eyebrow">Módulo 4 · Alfabetos, cadenas y lenguajes</p>
+        <h3>Mensajes: una cadena sobre {0, 1}</h3>
+        <p class="dato">w ∈ L</p>
+        <p class="dato-label">1011001 tiene 4 unos: paridad par</p>
+        <ul>
+          <li>Longitud, inversa, concatenación, potencia, prefijos y sufijos</li>
+          <li>Generación de Σⁿ, con |Σⁿ| = |Σ|ⁿ</li>
+          <li>Lenguajes: longitud fija, paridad par, cabecera y cola, palíndromos</li>
+        </ul>
+        <p class="clases">Clases: Cadenas, Lenguaje, PanelMensajes</p>
+      </div>
+      <img class="captura" src="img/modulo-mensajes.png" alt="Módulo Mensajes: el mensaje 1011001 validado contra el lenguaje de paridad par" loading="lazy">
+    </article>
+
+    <article class="modulo">
+      <div class="modulo-texto">
+        <p class="eyebrow">Módulo 5 · Probabilidad</p>
+        <h3>Canal: cuántos bits llegan dañados</h3>
+        <p class="dato">0,663</p>
+        <p class="dato-label">P(X = 0) con n = 8 y p = 0,05</p>
+        <p class="formula">P(X = k) = C(n, k) · p<sup>k</sup> · (1 − p)<sup>n−k</sup></p>
+        <ul>
+          <li>Espacio muestral Ω = {C, E}ⁿ y eventos</li>
+          <li>Media n·p y varianza n·p·(1 − p)</li>
+          <li>Simulación de N envíos frente a la teoría</li>
+        </ul>
+        <p class="clases">Clases: Binomial, Evento, EspacioMuestral, SimuladorCanal, PanelCanal, LienzoBarras</p>
+      </div>
+      <img class="captura" src="img/modulo-canal.png" alt="Módulo Canal: distribución binomial en barras con el evento X menor o igual a 1 en naranja" loading="lazy">
+    </article>
+
+    <article class="modulo invertido">
+      <div class="modulo-texto">
+        <p class="eyebrow">Módulo 6 · Álgebra booleana</p>
+        <h3>Verificador: el bit de paridad</h3>
+        <p class="formula">Emisor: P = b<sub>1</sub> ⊕ b<sub>2</sub> ⊕ … ⊕ b<sub>n</sub><br>Receptor: S = r<sub>1</sub> ⊕ … ⊕ r<sub>n+1</sub></p>
+        <ul>
+          <li>S = 1: número impar de errores, se detecta</li>
+          <li>S = 0: se acepta, aunque hayan fallado 2 bits</li>
+          <li>Tablas de verdad, mintérminos y equivalencias como De Morgan</li>
+        </ul>
+        <p class="clases">Clases: Paridad, ExpresionBooleana, PanelVerificador, LienzoCircuito</p>
+      </div>
+      <img class="captura" src="img/modulo-verificador.png" alt="Módulo Verificador: circuito de compuertas XOR con síndrome S igual a 0 y aviso de error no detectado" loading="lazy">
+    </article>
+  </div>
+</section>
+
+<section class="hallazgo">
+  <div class="contenedor">
+    <p class="eyebrow">El hallazgo</p>
+    <p class="grande">40 %</p>
+    <p>de los envíos llega con errores que el bit de paridad no detecta, en un canal ruidoso: con n = 8 bits y p = 0,25, P(error no detectado) = P(X = 2) + P(X = 4) + P(X = 6) + P(X = 8) = 0,4018.</p>
+  </div>
+</section>
+
+<section id="arquitectura" class="fondo-alterno">
+  <div class="contenedor">
+    <p class="eyebrow">Cómo está construido</p>
+    <h2>Tres capas: la interfaz solo muestra, la lógica calcula</h2>
+    <p class="intro">La lógica no importa nada de Swing, así que cada cálculo se probó por separado antes de conectarlo a las ventanas.</p>
+    <div class="capas">
+      <div class="capa"><h3>Vista</h3><p>VentanaPrincipal (JFrame con 6 pestañas), un panel por módulo y 5 lienzos que dibujan con Graphics2D.</p></div>
+      <p class="flecha">↓ pide los cálculos</p>
+      <div class="capa"><h3>Lógica</h3><p>Dijkstra, OperacionesConjuntos, ProductoCartesiano, Cadenas, Lenguaje, Binomial, Evento, EspacioMuestral, SimuladorCanal, Paridad, ExpresionBooleana.</p></div>
+      <p class="flecha">↓ calcula con los datos</p>
+      <div class="capa modelo"><h3>Modelo</h3><p>Estado (red, grupos, mensaje y último envío), compartido por las 6 pestañas; Grafo, Nodo, Arista, Conjunto.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="tecnologias">
+  <div class="contenedor">
+    <p class="eyebrow">Tecnologías</p>
+    <h2>Solo Java estándar, sin librerías externas</h2>
+    <div class="tec">
+      <div>
+        <div class="cifra"><p class="n">31</p><p>clases en 5 paquetes</p></div>
+        <div class="cifra"><p class="n">3.514</p><p>líneas de código</p></div>
+        <div class="cifra"><p class="n">0</p><p>dependencias externas</p></div>
+      </div>
+      <div class="tabla-envoltura"><table>
+        <tr><th>Herramienta</th><th>Para qué se usa</th></tr>
+        <tr><td>Java 17</td><td>Lenguaje del programa</td></tr>
+        <tr><td>NetBeans + Maven</td><td>Entorno de desarrollo y compilación (<code>pom.xml</code> sin dependencias)</td></tr>
+        <tr><td>javax.swing</td><td>Ventana, pestañas, botones, listas, tablas y avisos</td></tr>
+        <tr><td>java.awt / Java 2D</td><td>Dibujo del grafo, Venn, plano, barras y circuito con <code>Graphics2D</code>, <code>Area</code> y <code>Path2D</code></td></tr>
+        <tr><td>java.util</td><td>Listas, conjuntos, mapas, la cola del BFS y los números aleatorios de la simulación</td></tr>
+        <tr><td>Git + GitHub</td><td>Control de versiones, un commit por fase</td></tr>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<section id="ejecutar" class="fondo-alterno">
+  <div class="contenedor">
+    <p class="eyebrow">Ejecutar</p>
+    <h2>Cómo probarlo</h2>
+    <p class="intro">Requiere JDK 17 o superior.</p>
+    <div class="instalar">
+      <div class="tarjeta">
+        <h3>En NetBeans</h3>
+        <ol>
+          <li><i>Team → Git → Clone</i> con la URL del repositorio.</li>
+          <li>Abre el proyecto y pulsa <b>F6</b>.</li>
+          <li>Pestaña 1: <i>Red de ejemplo</i> → <i>Calcular ruta</i>.</li>
+          <li>Recorre las pestañas en orden hasta el Verificador.</li>
+        </ol>
+      </div>
+      <div class="tarjeta">
+        <h3>Desde la terminal</h3>
+        <pre>git clone https://github.com/NeyderJavier/NetDiscreta.git
+cd NetDiscreta
+mvn package
+java -jar target/NetDiscreta-1.0.jar</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="documentos">
+  <div class="contenedor">
+    <p class="eyebrow">Documentos</p>
+    <h2>Documentación del proyecto</h2>
+    <p class="intro">Todos en PDF.</p>
+    <div class="docs">
+      <a class="doc" href="Informe_Final_NetDiscreta.pdf"><p class="tipo">INFORME</p><h3>Informe final</h3><p>Marco teórico, diseño, implementación, 18 casos de prueba y conclusiones.</p><p class="descargar">Abrir PDF →</p></a>
+      <a class="doc" href="Manual_de_Usuario_NetDiscreta.pdf"><p class="tipo">MANUAL</p><h3>Manual de usuario</h3><p>Instalación, uso de cada módulo y solución de problemas.</p><p class="descargar">Abrir PDF →</p></a>
+      <a class="doc" href="NetDiscreta_Explicacion.pdf"><p class="tipo">EXPLICACIÓN</p><h3>Cómo funciona</h3><p>Arquitectura, librerías, algoritmos clave y preguntas de sustentación.</p><p class="descargar">Abrir PDF →</p></a>
+      <a class="doc" href="Propuesta_NetDiscreta.pdf"><p class="tipo">PROPUESTA</p><h3>Propuesta inicial</h3><p>Objetivos, módulos y cronograma con que empezó el proyecto.</p><p class="descargar">Abrir PDF →</p></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="contenedor">
+    <p><b>Neyder Javier Rojas Lasso</b><br>Ingeniería de Sistemas · Universidad Simón Bolívar</p>
+    <p><a href="https://github.com/NeyderJavier">GitHub</a> · <a href="https://www.linkedin.com/in/neyder-javier-rojas-lasso-952a36196">LinkedIn</a><br>Matemáticas Discretas · 2026</p>
+  </div>
+</footer>
+
+<div class="visor" id="visor" role="dialog" aria-label="Captura ampliada"><img id="visor-img" alt=""></div>
+
+<script>
+  // Visor: al hacer clic en una captura se muestra en grande; clic o Escape para cerrar
+  const visor = document.getElementById('visor');
+  const visorImg = document.getElementById('visor-img');
+  document.querySelectorAll('.captura').forEach(img => {
+    img.addEventListener('click', () => {
+      visorImg.src = img.src;
+      visorImg.alt = img.alt;
+      visor.classList.add('abierto');
+    });
+  });
+  visor.addEventListener('click', () => visor.classList.remove('abierto'));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') visor.classList.remove('abierto'); });
+</script>
+</body>
+</html>
